@@ -92,7 +92,7 @@ namespace AppsettingsEDU.Services
             _logger.LogInformation("################################");
         }
 
-        public void AccessStaticDataClassWithValuesFromConfig() // wonderfull naming, huh?
+        public void AccessStaticDataClassWithValuesFromConfig() // wonderful naming, huh?
         {
             _logger.LogInformation("Access some static data holding class with internal call of the helper class from a library ...");
 

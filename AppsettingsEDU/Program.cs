@@ -13,7 +13,7 @@ namespace AppsettingsEDU
     {
         private static async Task Main(string[] args)
         {
-            var appConfig = AppSettingsHelper.InitAppConfigBuilder().Build();
+            var appConfig = AppSettingsHelper.GetAppConfigBuilder().Build();
             Log.Logger = LogInitializer.CreateLogger(appConfig);
 
             Log.Information("{AssemblyName} start", ThisAssembly.AssemblyName);

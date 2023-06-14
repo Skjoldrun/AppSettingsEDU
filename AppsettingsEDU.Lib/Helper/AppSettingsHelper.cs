@@ -1,12 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace AppsettingsEDU.Lib.Helper
 {
     public class AppSettingsHelper
     {
-        private static AppSettingsHelper? _appSettings;
+        public const string AspNetVarVarName = "ASPNETCORE_ENVIRONMENT";
+        public const string DotNetEnvVarName = "DOTNET_ENVIRONMENT";
 
-        public object? AppSettingValue { private get; set; }
+        private static AppSettingsHelper _appSettings;
+
+        public object AppSettingValue { private get; set; }
 
         public AppSettingsHelper(IConfiguration config, Type T, string Key)
         {
@@ -15,14 +19,27 @@ namespace AppsettingsEDU.Lib.Helper
 
         private static AppSettingsHelper GetSettings(Type T, string Key)
         {
-            IConfiguration configuration = InitAppConfigBuilder().Build();
+            IConfiguration configuration = GetAppConfigBuilder().Build();
             var settings = new AppSettingsHelper(configuration.GetSection("AppSettings"), T, Key);
 
             return settings;
         }
 
         /// <summary>
-        /// Gets the value from the AppSettings section by type T.
+        /// Switches the optional environment variable name for adding the appsetting.<ENVIRONMENT>.json.
+        /// </summary>
+        private static string GetEnvVarName()
+        {
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable(AspNetVarVarName)))
+                return AspNetVarVarName;
+            else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable(DotNetEnvVarName)))
+                return DotNetEnvVarName;
+            else
+                return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the value from the 'AppSettings' section by type T.
         /// </summary>
         /// <typeparam name="T">expected type of the setting</typeparam>
         /// <param name="Key">key name of the setting</param>
@@ -36,7 +53,7 @@ namespace AppsettingsEDU.Lib.Helper
             if (default(T) == null)
                 type = typeof(string);
             else
-                type = default(T)!.GetType();
+                type = default(T).GetType();
 
             _appSettings = GetSettings(type, Key);
             return (T)_appSettings.AppSettingValue;
@@ -46,14 +63,16 @@ namespace AppsettingsEDU.Lib.Helper
         /// This methods is usually in the Program.cs or Startup.cs.
         /// If you locate this here you can access the AppSettings from anywhere else as well.
         /// </summary>
-        /// <returns>The built appsettings object</returns>
-        public static IConfigurationBuilder InitAppConfigBuilder()
+        /// <returns>configurationBuilder object</returns>
+        public static IConfigurationBuilder GetAppConfigBuilder()
         {
+            var envVarName = GetEnvVarName();
             var appConfigBuilder = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory) // this path works if started from PATH env var
+                .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable(envVarName)}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
+
             return appConfigBuilder;
         }
     }

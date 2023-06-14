@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppsettingsEDU", "AppsettingsEDU\AppsettingsEDU.csproj", "{B57D612C-43CA-4EBC-9086-CE91DE174E62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppsettingsEDU.Lib", "AppsettingsEDU.Lib\AppsettingsEDU.Lib.csproj", "{6B60EA87-255E-43E8-901F-A612EB8A1D0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B57D612C-43CA-4EBC-9086-CE91DE174E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B57D612C-43CA-4EBC-9086-CE91DE174E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B57D612C-43CA-4EBC-9086-CE91DE174E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B57D612C-43CA-4EBC-9086-CE91DE174E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B60EA87-255E-43E8-901F-A612EB8A1D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B60EA87-255E-43E8-901F-A612EB8A1D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B60EA87-255E-43E8-901F-A612EB8A1D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B60EA87-255E-43E8-901F-A612EB8A1D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {138AE8A2-6486-4EA5-9F95-81772CE2AB73}
+	EndGlobalSection
+EndGlobal

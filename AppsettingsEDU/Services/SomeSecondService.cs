@@ -1,4 +1,5 @@
-﻿using AppsettingsEDU.Objects.Settings;
+﻿using AppsettingsEDU.Lib.Helper;
+using AppsettingsEDU.Objects.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -20,6 +21,12 @@ namespace AppsettingsEDU.Services
 
         public async Task Run()
         {
+            AccessTypedModelSettings();
+            AccessConnectionStrings();
+        }
+
+        private void AccessTypedModelSettings()
+        {
             _logger.LogInformation("This is the second service demonstrating injection of typed configuration objects insted of IOptions...");
 
             string? modelSetting = _someSettingsModel.ModelSetting;
@@ -28,6 +35,14 @@ namespace AppsettingsEDU.Services
             _logger.LogInformation("Value from the model string: {modelSetting}", modelSetting);
             _logger.LogInformation("Values from the settings model subsettings: {settingsString}, {settingsInt}",
                 someSubSettingsModel.MyModelSubSettingString, someSubSettingsModel.MyModelSubSettingInt);
+
+            _logger.LogInformation("################################");
+        }
+
+        private void AccessConnectionStrings()
+        {
+            string connString = AppSettingsHelper.GetConnectionString("Default");
+            _logger.LogInformation("Value from the default connectionString: {connString}", connString);
 
             _logger.LogInformation("################################");
         }

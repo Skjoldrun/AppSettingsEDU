@@ -17,10 +17,18 @@ namespace AppsettingsEDU.Lib.Helper
             AppSettingValue = config.GetValue(T, Key);
         }
 
-        private static AppSettingsHelper GetSettings(Type T, string Key)
+        private static AppSettingsHelper ReadSettings(Type T, string Key)
         {
             IConfiguration configuration = GetAppConfigBuilder().Build();
             var settings = new AppSettingsHelper(configuration.GetSection("AppSettings"), T, Key);
+
+            return settings;
+        }
+
+        private static AppSettingsHelper ReadConnectionString(string Key)
+        {
+            IConfiguration configuration = GetAppConfigBuilder().Build();
+            var settings = new AppSettingsHelper(configuration.GetSection("ConnectionStrings"), typeof(string), Key);
 
             return settings;
         }
@@ -55,8 +63,22 @@ namespace AppsettingsEDU.Lib.Helper
             else
                 type = default(T).GetType();
 
-            _appSettings = GetSettings(type, Key);
+            _appSettings = ReadSettings(type, Key);
             return (T)_appSettings.AppSettingValue;
+        }
+
+        /// <summary>
+        /// Gets the connectionString by Key.
+        /// </summary>
+        /// <param name="Key">Key of the connectionString</param>
+        /// <returns>connectionString</returns>
+        public static string GetConnectionString(string Key)
+        {
+            if (string.IsNullOrWhiteSpace(Key))
+                throw new ArgumentNullException(nameof(Key));
+
+            _appSettings = ReadConnectionString(Key);
+            return _appSettings.AppSettingValue.ToString();
         }
 
         /// <summary>

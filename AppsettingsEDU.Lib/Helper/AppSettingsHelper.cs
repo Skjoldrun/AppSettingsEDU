@@ -8,31 +8,6 @@ namespace AppsettingsEDU.Lib.Helper
         public const string AspNetVarVarName = "ASPNETCORE_ENVIRONMENT";
         public const string DotNetEnvVarName = "DOTNET_ENVIRONMENT";
 
-        private static AppSettingsHelper _appSettings;
-
-        public object AppSettingValue { private get; set; }
-
-        public AppSettingsHelper(IConfiguration config, Type T, string Key)
-        {
-            AppSettingValue = config.GetValue(T, Key);
-        }
-
-        private static AppSettingsHelper ReadSettings(Type T, string Key)
-        {
-            IConfiguration configuration = GetAppConfigBuilder().Build();
-            var settings = new AppSettingsHelper(configuration.GetSection("AppSettings"), T, Key);
-
-            return settings;
-        }
-
-        private static AppSettingsHelper ReadConnectionString(string Key)
-        {
-            IConfiguration configuration = GetAppConfigBuilder().Build();
-            var settings = new AppSettingsHelper(configuration.GetSection("ConnectionStrings"), typeof(string), Key);
-
-            return settings;
-        }
-
         /// <summary>
         /// Switches the optional environment variable name for adding the appsetting.<ENVIRONMENT>.json.
         /// </summary>
@@ -63,8 +38,12 @@ namespace AppsettingsEDU.Lib.Helper
             else
                 type = default(T).GetType();
 
-            _appSettings = ReadSettings(type, Key);
-            return (T)_appSettings.AppSettingValue;
+            IConfiguration configuration = GetAppConfigBuilder().Build();
+            var result = configuration
+                .GetSection("AppSettings")
+                .GetValue(type, Key);
+
+            return (T)result;
         }
 
         /// <summary>
@@ -77,8 +56,13 @@ namespace AppsettingsEDU.Lib.Helper
             if (string.IsNullOrWhiteSpace(Key))
                 throw new ArgumentNullException(nameof(Key));
 
-            _appSettings = ReadConnectionString(Key);
-            return _appSettings.AppSettingValue.ToString();
+            IConfiguration configuration = GetAppConfigBuilder().Build();
+            var result = configuration
+                .GetSection("ConnectionStrings")
+                .GetValue(typeof(string), Key)
+                .ToString();
+
+            return result ?? string.Empty;
         }
 
         /// <summary>

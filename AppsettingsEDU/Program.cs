@@ -19,6 +19,11 @@ namespace AppsettingsEDU
             Log.Information("{AssemblyName} start", ThisAssembly.AssemblyName);
 
             var host = Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration(builder =>
+                {
+                    builder.Sources.Clear();
+                    builder.AddConfiguration(appConfig);
+                })
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<ISomeService, SomeService>();

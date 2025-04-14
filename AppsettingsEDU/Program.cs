@@ -19,10 +19,11 @@ namespace AppsettingsEDU
             Log.Information("{AssemblyName} start", ThisAssembly.AssemblyName);
 
             var host = Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration(builder =>
+                .UseSerilog()
+                .ConfigureAppConfiguration((hostingContext, configBuilder) =>
                 {
-                    builder.Sources.Clear();
-                    builder.AddConfiguration(appConfig);
+                    configBuilder.Sources.Clear();
+                    configBuilder.AddConfiguration(appConfig);
                 })
                 .ConfigureServices((context, services) =>
                 {
@@ -35,10 +36,9 @@ namespace AppsettingsEDU
                     // Alternative way to inject the direct class object instead of IOptions
                     services.AddSingleton(appConfig.GetSection("AppSettings:SomeSettingsModel").Get<SomeSettingsModel>());
                 })
-                .UseSerilog()
                 .Build();
 
-            var service = ActivatorUtilities.GetServiceOrCreateInstance<SomeService>(host.Services);
+            var service = host.Services.GetRequiredService<ISomeService>();
             var secondService = ActivatorUtilities.GetServiceOrCreateInstance<SomeSecondService>(host.Services);
 
             try
